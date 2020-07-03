@@ -17,12 +17,8 @@ async def on_message(message):
     print(message.channel)
     if profanity.contains_profanity(message.content.find):
         # A profanity has been found!
-        # TODO: send a DM with a warning
-        try:
-            await message.author.create_dm()
-        except:
-            pass
-        await message.author.dm_channel.send("**CryptoAlgo Bot Moderator**\n Your message: " + profanity.censor(message.content) + " contains unallowed words and has been deleted by our bot. If you believe that your message was deleted in error, please contact a moderator.")
+        # DONE: send a DM with a warning
+        await message.author.send("**CryptoAlgo Bot Moderator**\n Your message: " + profanity.censor(message.content) + " contains unallowed words and has been deleted by our bot. If you believe that your message was deleted in error, please contact a moderator.")
         await message.delete() # Delete it
         await message.channel.send("_This message contains inappropriate language_", delete_after=5) # Autodeletion after 5 seconds
     if message.channel.name == 'verification': # Checks if post is in verification channel
