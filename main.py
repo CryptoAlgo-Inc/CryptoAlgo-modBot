@@ -17,6 +17,7 @@ async def on_message(message):
     print(message.channel)
     if profanity.contains_profanity(message.content):
         # A profanity has been found!
+        keepAlive.addProfanitiesCounter() # Add the number of profanities for web dash
         # DONE: send a DM with a warning
         await message.author.send("**CryptoAlgo Bot Moderator**\n Your message: " + profanity.censor(message.content, '-') + " contains unallowed words and has been deleted by our bot. If you believe that your message was deleted in error, please contact a moderator.")
         await message.delete() # Delete it
@@ -26,9 +27,9 @@ async def on_message(message):
         await asyncio.sleep(10) # Async sleep
         await message.delete()
     elif message.channel.name == 'verification':
-        await asyncio.sleep(30)
+        await asyncio.sleep(30) # If its not a verification prompt, delete it aft 30 secs
         await message.delete()
-        await message.channel.send("_This message has been deleted_", delete_after=5) # Autodeletion after 
+        await message.channel.send("_This message has been deleted to reduce clutter. Please do not post in the verification chat_", delete_after=5) # Autodeletion after 5 seconds
     elif message.content == "!info":
         await message.channel.send("Hi there! This is written by Wang Zerui and Vincent Kwok!")
     if message.content == os.getenv("SELFDESTRUCT") and (message.author == "▉▉▉▉▉#4239" or message.author == "CryptoAlgo Team#0059"):
