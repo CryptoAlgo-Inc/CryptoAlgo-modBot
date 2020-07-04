@@ -15,17 +15,21 @@ async def on_ready():
 @client.event
 async def on_message(message):
     print(message.channel)
-    if profanity.contains_profanity(message.content.find):
+    if profanity.contains_profanity(message.content):
         # A profanity has been found!
         # DONE: send a DM with a warning
-        await message.author.send("**CryptoAlgo Bot Moderator**\n Your message: " + profanity.censor(message.content) + " contains unallowed words and has been deleted by our bot. If you believe that your message was deleted in error, please contact a moderator.")
+        await message.author.send("**CryptoAlgo Bot Moderator**\n Your message: " + profanity.censor(message.content, '-') + " contains unallowed words and has been deleted by our bot. If you believe that your message was deleted in error, please contact a moderator.")
         await message.delete() # Delete it
-        await message.channel.send("_This message contains inappropriate language_", delete_after=5) # Autodeletion after 5 seconds
-    if message.channel.name == 'verification': # Checks if post is in verification channel
-        # Delete the message after 30 seconds to reduce clutter
-        await asyncio.sleep(30) # Async sleep
+        await message.channel.send("_This message contained inappropriate language and has been deleted_", delete_after=5) # Autodeletion after 5 seconds
+    if message.channel.name == 'verification' and message.content == "!verify": # Checks if post is in verification channel
+        # Delete the message after 10 seconds to reduce clutter
+        await asyncio.sleep(10) # Async sleep
         await message.delete()
-    if message.content == "!info":
+    elif message.channel.name == 'verification':
+        await asyncio.sleep(30)
+        await message.delete()
+        await message.channel.send("_This message has been deleted_", delete_after=5) # Autodeletion after 
+    elif message.content == "!info":
         await message.channel.send("Hi there! This is written by Wang Zerui and Vincent Kwok!")
     if message.content == os.getenv("SELFDESTRUCT") and (message.author == "▉▉▉▉▉#4239" or message.author == "CryptoAlgo Team#0059"):
         # For self destructing function
